@@ -1,0 +1,446 @@
+body {
+    font-family: "Hanken Grotesk", serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+    /*background-color: #2f2f2f;*/
+    background: #000;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Container for the content */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+    text-align: center;
+    background-color: #333;
+    border-radius: 10px;
+    padding: 20px;
+    width: calc(100% - 30px);
+    box-sizing: border-box;
+    height: calc(100% - 30px);
+    padding: 50px 100px;
+    top: 0;
+    left: 0;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(180deg, #ee1c7d 0%,  #fd7827 100%);
+}
+
+h1 {
+  font-size: 40px;
+  font-weight: 900;
+}
+
+/* Progress bar container */
+.progress-container {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    background: transparent;
+}
+
+/* Smooth transition for the progress bar */
+progress {
+    width: 80vw;
+    
+    max-width: 400px;
+    height: 30px;
+    margin-top: 10px;
+    background: transparent;
+    border: 1px solid #fff;
+    transition: width 1s ease; 
+    border-radius: 50px;/* Smooth transition */
+}
+
+/* Styling the progress meter inside the progress bar */
+progress::-webkit-progress-bar {
+    background: transparent; /* Transparent background for the bar */
+}
+
+/* Styling the progress fill (the actual progress) */
+progress::-webkit-progress-value {
+    background-color: #fff; /* White progress fill */
+    border-radius: 50px; /* Rounded corners on the progress fill */
+}
+
+/* For Firefox */
+progress::-moz-progress-bar {
+    background-color: #fff; /* White progress fill */
+    border-radius: 50px; /* Rounded corners on the progress fill */
+}
+
+
+/* Congrats effect styling */
+#congratulations {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #28a745;
+    color: #fff;
+    padding: 20px 40px;
+    font-size: 24px;
+    border-radius: 10px;
+    animation: showCongratulations 3s forwards;
+}
+
+/* Keyframes for the congratulatory effect */
+@keyframes showCongratulations {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Popup animation for debt selection */
+.popup-content {
+    animation: popupAppear 0.3s ease-out;
+}
+
+@keyframes popupAppear {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+
+/* Button styling */
+#debtButton {
+    padding: 16px;
+    width: 340px;
+    font-size: 22px;
+    background-color: #fff;
+    color: #fd7827;
+    font-size: 23px;
+    font-weight: 800;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-family: "Hanken Grotesk", serif;
+    transition: 0.2s ease;
+    animation: shake-with-interval 1.5s ease-in-out infinite;
+}
+
+#debtButton:hover, #leaderboardButton:hover {
+    width: 360px;
+}
+
+#leaderboardButton {
+    padding: 14px;
+    width: 339px;
+    font-size: 22px;
+    background-color: transparent;
+    color: #fff;
+    font-size: 23px;
+    font-weight: 800;
+    border: 3px solid #fff;
+    border-radius: 100px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-family: "Hanken Grotesk", serif;
+    transition: 0.2s ease;
+}
+
+.debt-option {
+  padding: 15px;
+  width: 100px;
+  color: #000;
+  background: #000;
+  font-size: 15px;
+  font-weight: 400;
+  border-radius: 5px;
+  margin: 0 5px;
+}
+
+
+@keyframes shake-with-interval {
+    0% { transform: translateX(0) rotate(0deg); }
+    5% { transform: translateX(-8px) rotate(-8deg); }
+    10% { transform: translateX(8px) rotate(8deg); }
+    15% { transform: translateX(-6px) rotate(-6deg); }
+    20% { transform: translateX(6px) rotate(6deg); }
+    25% { transform: translateX(-4px) rotate(-4deg); }
+    30% { transform: translateX(4px) rotate(4deg); }
+    35% { transform: translateX(-2px) rotate(-2deg); }
+    40% { transform: translateX(2px) rotate(2deg); }
+    50% { transform: translateX(0) rotate(0deg); } /* End of shake */
+    100% { transform: translateX(0) rotate(0deg); } /* Idle time */
+}
+
+/* Popup styling */
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background-color: #444;
+    padding: 30px;
+    border-radius: 10px;
+    width: 400px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.debt-options {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 20px 0;
+}
+
+.debt-options button {
+    background-color: #fff;
+    cursor: pointer;
+}
+
+input, textarea {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #eaeaea;
+    color: #000;
+    font-family: Arial, Sans-Serif;
+    font-size: 14px;
+    outline: none;
+    resize: none;
+}
+
+input:focus, textarea:focus {
+  border: 1px solid #fd7827;
+}
+
+/* Popup close button */
+#closePopup, #closeLeaderboard {
+    background-color: transparent;
+    
+      padding: 14px;
+  width: 80%;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 300;
+  color: #fff;
+  cursor: pointer;
+}
+
+#closePopup:hover, #closeLeaderboard:hover {
+  opacity: 0.5;
+}
+
+#closeLeaderboard {
+  color: #000;
+  border: none;
+}
+
+
+/* Style the satisfaction level container */
+#satisfactionLevel {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #fff;
+}
+
+/* Style the satisfaction level value */
+#satisfactionValue {
+    font-weight: bold;
+    color: #28a745; /* Green color for satisfaction */
+}
+
+
+/* Add active class styling for selected debt options */
+.debt-option.selected {
+    background-color: #fd7827; /* Highlight selected option */
+    color: #fff;  /* Change text color to white for selected option */
+    border: 2px solid #fff; /* Add border to make the selection stand out */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Button styling when enabled after selection */
+#tortureButton.enabled {
+  color: #fd7827;
+    background-color: #ffffff; /* Green color when the button is active */
+    cursor: pointer; /* Make the cursor pointer to indicate the button is clickable */
+}
+
+#tortureButton.enabled:hover {
+  opacity: 0.95;
+}
+
+/* Disable button when no option is selected */
+#tortureButton {
+  padding: 14px;
+  width: 80%;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: 900;
+    background-color: #ccc; /* Gray color when inactive */
+}
+
+/* Toast Notification Styles */
+#toast {
+    visibility: hidden;
+    min-width: 300px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1000;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 30px;
+    height: fit-content;
+    font-size: 17px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: opacity 0.5s, bottom 0.5s;
+}
+
+#toast.show {
+    visibility: visible;
+    opacity: 1;
+    bottom: 50px;
+}
+
+
+
+
+
+
+
+
+
+
+/* Popup Styles */
+#leaderboardPopup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    user-select: none;
+}
+
+.popup-content-l {
+    position: relative;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    width: 400px;
+    height: 80%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#leaderboardContainer {
+    height: 100%;
+    width: 92%;
+    background: #fff;
+    overflow-y: scroll;
+    margin-top: 0;
+    margin-bottom: 10px;
+    
+}
+
+/* Leaderboard Item */
+.leaderboard-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Align items to the left */
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #f7f7f7;
+    border-radius: 8px;
+    width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* Rank Circle */
+.rank-circle {
+    background: #007bff;
+    color: #fff;
+    font-size: 18px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px; /* Space between rank and user details */
+}
+
+/* User Details (name and last active) */
+.user-details {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-right: 15px; /* Space between user details and amount */
+}
+
+/* Strong element for the debt added */
+.strong-container {
+    flex-grow: 1; /* Take up remaining space */
+    text-align: right; /* Align text to the right */
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.strong-container strong {
+  font-size: 18px;
+  font-weight: 700;
+  color: #000;
+}
+
+.user-details h3 {
+    margin: 0;
+    color: #000;
+}
+
+.user-details span {
+    font-size: 12px;
+    color: #666;
+}
+
