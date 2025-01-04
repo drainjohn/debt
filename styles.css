@@ -22,15 +22,14 @@ body {
   justify-content: center;
     text-align: center;
     background-color: #333;
-    border-radius: 10px;
+    border-radius: 50px;
     padding: 20px;
-    width: calc(100% - 30px);
+    width: calc(100% - 60px);
     box-sizing: border-box;
-    height: calc(100% - 30px);
+    height: calc(100% - 60px);
     padding: 50px 100px;
     top: 0;
     left: 0;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
     background: linear-gradient(180deg, #ee1c7d 0%,  #fd7827 100%);
 }
 
