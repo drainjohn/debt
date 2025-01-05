@@ -99,9 +99,8 @@ async function addDebt(amount, message) {
         const lastUpdated = userDoc.data().lastUpdated?.toDate(); // Convert Firestore Timestamp to Date object
         const now = new Date();
 
-        if (lastUpdated && (now - lastUpdated) < 60 * 60 * 1000) {
-            // Cooldown period of 1 hour (60 minutes * 60 seconds * 1000 milliseconds)
-            const timeLeft = Math.ceil((60 * 60 * 1000 - (now - lastUpdated)) / 60000); // Minutes left
+        if (lastUpdated && (now - lastUpdated) < 30 * 60 * 1000) { // Cooldown period of 30 minutes (30 minutes * 60 seconds * 1000 milliseconds)
+            const timeLeft = Math.ceil((30 * 60 * 1000 - (now - lastUpdated)) / 60000); // Minutes left
             showCooldownNotification(timeLeft);
             return;
         }
