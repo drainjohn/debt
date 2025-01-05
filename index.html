@@ -8,11 +8,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Alumni+Sans+Pinstripe:ital@0;1&family=Domine:wght@400..700&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
-    <link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTNdrv1buiOmFqljwkVbWvPNm-EDwiTj4s8DKVi2mXSctx3Lw:https://logosandtypes.com/wp-content/uploads/2020/11/jetruby-agency.svg&s" type="image/x-icon">
+    <script src="https://kit.fontawesome.com/a47fae704c.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <div class="container">
         <h1>John's Debt Stats</h1>
+        <a href="x.com/idrainjohn"><i class="fa-brands fa-x-twitter"></i></a>
 
         <div class="progress-container">
             <label for="debtProgress">Debt Status:</label>
@@ -34,6 +35,10 @@
 </div>
 <input type="number" id="customAmount" placeholder="Custom Amount (max $2000)" min="1" max="2000">
 <textarea id="messageInput" placeholder="Send a message to bully John"></textarea>
+        <div id="totalAmountDisplay">
+          <p>Total debt to add: <span id="totalDebtAmount">$0</span></p>
+        </div>
+
         <div id="satisfactionLevel">
             <p>Goddess Satisfaction: <span id="satisfactionValue">0</span>%</p>
         </div>
