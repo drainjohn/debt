@@ -146,10 +146,9 @@ progress::-moz-progress-bar {
 #debtButton {
     padding: 16px;
     width: 340px;
-    font-size: 22px;
+    font-size: 19px;
     background-color: #fff;
     color: #fd7827;
-    font-size: 23px;
     font-weight: 800;
     border: none;
     border-radius: 100px;
@@ -167,10 +166,9 @@ progress::-moz-progress-bar {
 #leaderboardButton {
     padding: 14px;
     width: 339px;
-    font-size: 22px;
+    font-size: 19px;
     background-color: transparent;
     color: #fff;
-    font-size: 23px;
     font-weight: 800;
     border: 3px solid #fff;
     border-radius: 100px;
@@ -280,6 +278,10 @@ input:focus, textarea:focus {
   cursor: pointer;
   border: none;
   outline: none;
+}
+
+#closeLeaderboard {
+  margin-bottom: 15px;
 }
 
 #closePopup:hover, #closeLeaderboard:hover {
@@ -396,14 +398,19 @@ input:focus, textarea:focus {
 .popup-content-l {
     position: relative;
     background-color: #fff;
-    padding: 15px;
+    padding: 0px;
     border-radius: 10px;
     width: 350px;
-    height: 80%;
+    height: 85%;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
+    -webkit-overflow-scrolling: touch;
+}
+
+.leaderboardContainer::-webkit-scrollbar {
+    display: none; /* Hides the Webkit scroll bar */
 }
 
 #leaderboardContainer {
@@ -413,7 +420,7 @@ input:focus, textarea:focus {
     overflow-y: scroll;
     margin-top: 0;
     margin-bottom: 10px;
-    
+    -webkit-overflow-scrolling: touch;
 }
 
 /* Leaderboard Item */
@@ -430,10 +437,44 @@ input:focus, textarea:focus {
     box-sizing: border-box;
 }
 
+/* Highlight for the current user's leaderboard item */
 .leaderboard-item.current-user {
-    background-color: #d4edda;
-    border: 2px solid #155724;
+    background-color: #000;
 }
+
+/* Optional: Change text colour */
+.leaderboard-item.current-user .user-details h3,
+.leaderboard-item.current-user .user-details h3 span,
+.leaderboard-item.current-user .user-details h3 size-6,
+.leaderboard-item.current-user strong,
+.leaderboard-item.current-user .user-details span {
+    color: #fff;
+}
+
+.leaderboard-item.current-user .rank-circle {
+    background: #fff; /* Darker blue */
+    color: #000;
+}
+
+/* Gold for 1st place */
+.rank-circle.gold {
+    background-color: #ffd700; /* Gold */
+    color: #fff;
+}
+
+/* Silver for 2nd place */
+.rank-circle.silver {
+    background-color: #c0c0c0; /* Silver */
+    color: #fff;
+}
+
+/* Bronze for 3rd place */
+.rank-circle.bronze {
+    background-color: #cd7f32; /* Bronze */
+    color: #fff;
+}
+
+
 
 /* Rank Circle */
 .rank-circle {
@@ -447,6 +488,8 @@ input:focus, textarea:focus {
     justify-content: center;
     align-items: center;
     margin-right: 15px; /* Space between rank and user details */
+    min-width: 40px; /* Prevent shrinking */
+    min-height: 40px;
 }
 
 /* User Details (name and last active) */
@@ -481,6 +524,11 @@ input:focus, textarea:focus {
     color: #666;
 }
 
+.user-details h3 span {
+  font-size: 16px;
+  font-weight: 900;
+}
+
 #totalAmountDisplay {
     margin-bottom: -25px;
     position: relative;
@@ -500,43 +548,6 @@ input:focus, textarea:focus {
   font-weight: 900;
 }
 
-
-
-
-/* Container for the name input and icon (flex layout) */
-.name-edit-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    width: 100%; /* Ensure it takes full width of the parent container */
-}
-
-/* Style for the name input field */
-.name-input {
-    font-size: 1rem;
-    padding: 5px;
-    flex-grow: 1; /* Allow input to grow and take available space */
-    max-width: 80%; /* Prevent input from taking more than 80% of the space */
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    display: inline-block;
-    transition: all 0.3s ease;
-    margin-right: 10px; /* Space between input and the tick icon */
-}
-
-/* Focus state for the name input field */
-.name-input:focus {
-    outline: none;
-    border-color: #007bff;
-    background-color: #f5f5f5;
-}
-
-/* Style for the edit pencil icon */
-.edit-icon {
-    cursor: pointer;
-    transition: transform 0.3s ease; /* Smooth transition for the icon */
-}
-
 /* Style for the tick icon */
 .save-icon {
     cursor: pointer;
@@ -551,9 +562,32 @@ input:focus, textarea:focus {
 }
 
 
-/* Hide the input field initially */
-.name-input[style="display: none;"] {
-    display: none;
+/* User Name Container (ensure input and icon are on the same row) */
+.user-name-container {
+    display: flex;
+    align-items: center; /* Vertically center items */
+}
+
+/* Style for the name input field (adjust width to prevent wrapping) */
+.name-input {
+  display: none;
+  font-weight: 800;
+    font-size: 14px;
+    padding: 3px;
+    width: 120px; /* Adjust width as needed */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: -4px;
+    margin-bottom: 2px;
+    margin-right: 0; /* Space between input and the tick icon */
+}
+
+/* Style for the edit pencil icon and save icon (ensure it stays inline) */
+.edit-icon {
+    cursor: pointer;
+    margin-left: 5px; /* Space between input and icon */
+    display: flex;
+    align-items: center; /* Vertically center the icon */
 }
 
 
