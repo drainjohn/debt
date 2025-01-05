@@ -399,7 +399,7 @@ input:focus, textarea:focus {
     position: relative;
     background-color: #fff;
     padding: 0px;
-    border-radius: 10px;
+    border-radius: 15px;
     width: 350px;
     height: 85%;
     text-align: center;
