@@ -22,19 +22,36 @@ body {
   justify-content: center;
     text-align: center;
     background-color: #333;
-    border-radius: 50px;
+    border-radius: 10px;
     padding: 20px;
-    width: calc(100% - 60px);
+    width: calc(100% - 30px);
     box-sizing: border-box;
-    height: calc(100% - 60px);
+    height: calc(100% - 30px);
     padding: 50px 100px;
     top: 0;
     left: 0;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
     background: linear-gradient(180deg, #ee1c7d 0%,  #fd7827 100%);
 }
 
+.container a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 30px;
+  background: #000;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-top: -20px;
+}
+
 h1 {
-  font-size: 40px;
+  font-size: 35px;
+  letter-spacing: 0;
   font-weight: 900;
 }
 
@@ -203,20 +220,23 @@ progress::-moz-progress-bar {
 }
 
 .popup-content {
-    background-color: #444;
+    background-color: #fff;
     padding: 30px;
-    border-radius: 10px;
+    border-radius: 15px;
     width: 400px;
+    height: 80%;
+    color: #000;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
 
 .debt-options {
     display: flex;
     justify-content: space-evenly;
-    margin: 20px 0;
+    margin: 10px 0;
 }
 
 .debt-options button {
@@ -225,15 +245,15 @@ progress::-moz-progress-bar {
 }
 
 input, textarea {
-    width: 90%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
+    width: 80%;
+    padding: 14px;
+    margin: 6px 0;
+    border: 1px solid #ddd;
     border-radius: 5px;
-    background-color: #eaeaea;
+    background-color: #fff;
     color: #000;
     font-family: Arial, Sans-Serif;
-    font-size: 14px;
+    font-size: 16px;
     outline: none;
     resize: none;
 }
@@ -244,15 +264,17 @@ input:focus, textarea:focus {
 
 /* Popup close button */
 #closePopup, #closeLeaderboard {
-    background-color: transparent;
-    
-      padding: 14px;
+  background-color: #fff;
+  padding: 14px;
+  margin-top: 8px;
   width: 80%;
   border-radius: 50px;
   font-size: 16px;
   font-weight: 300;
-  color: #fff;
+  color: #000;
   cursor: pointer;
+  border: none;
+  outline: none;
 }
 
 #closePopup:hover, #closeLeaderboard:hover {
@@ -267,15 +289,20 @@ input:focus, textarea:focus {
 
 /* Style the satisfaction level container */
 #satisfactionLevel {
-    margin-top: 20px;
     font-size: 18px;
-    color: #fff;
+    color: #000;
+    margin: none;
+    padding: none;
+    height: fit-content;
 }
 
 /* Style the satisfaction level value */
 #satisfactionValue {
     font-weight: bold;
-    color: #28a745; /* Green color for satisfaction */
+    padding: none;
+    height: fit-content;
+    margin: none;
+    color: #28a745; /*Green color for satisfaction */
 }
 
 
@@ -283,15 +310,15 @@ input:focus, textarea:focus {
 .debt-option.selected {
     background-color: #fd7827; /* Highlight selected option */
     color: #fff;  /* Change text color to white for selected option */
-    border: 2px solid #fff; /* Add border to make the selection stand out */
+    border: 0 solid #fff; /* Add border to make the selection stand out */
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Button styling when enabled after selection */
 #tortureButton.enabled {
-  color: #fd7827;
-    background-color: #ffffff; /* Green color when the button is active */
-    cursor: pointer; /* Make the cursor pointer to indicate the button is clickable */
+  color: #fff;
+  background-color: #000; /* Green color when the button is active */
+  cursor: pointer; /* Make the cursor pointer to indicate the button is clickable */
 }
 
 #tortureButton.enabled:hover {
@@ -305,7 +332,8 @@ input:focus, textarea:focus {
   border-radius: 50px;
   font-size: 18px;
   font-weight: 900;
-    background-color: #ccc; /* Gray color when inactive */
+  border: none;
+  background-color: #ccc; /* Gray color when inactive */
 }
 
 /* Toast Notification Styles */
@@ -363,7 +391,7 @@ input:focus, textarea:focus {
 .popup-content-l {
     position: relative;
     background-color: #fff;
-    padding: 10px;
+    padding: 15px;
     border-radius: 10px;
     width: 400px;
     height: 80%;
@@ -395,6 +423,11 @@ input:focus, textarea:focus {
     width: 100%;
     overflow: hidden;
     box-sizing: border-box;
+}
+
+.leaderboard-item.current-user {
+    background-color: #d4edda;
+    border: 2px solid #155724;
 }
 
 /* Rank Circle */
@@ -442,4 +475,80 @@ input:focus, textarea:focus {
     font-size: 12px;
     color: #666;
 }
+
+#totalAmountDisplay {
+    margin-bottom: -25px;
+    position: relative;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    height: fit-content;
+}
+
+#totalAmountDisplay p {
+  height: fit-content;
+  margin: none;
+  font-weight: 400;
+}
+
+#totalAmountDisplay p span {
+  font-weight: 900;
+}
+
+
+
+
+/* Container for the name input and icon (flex layout) */
+.name-edit-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%; /* Ensure it takes full width of the parent container */
+}
+
+/* Style for the name input field */
+.name-input {
+    font-size: 1rem;
+    padding: 5px;
+    flex-grow: 1; /* Allow input to grow and take available space */
+    max-width: 80%; /* Prevent input from taking more than 80% of the space */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: inline-block;
+    transition: all 0.3s ease;
+    margin-right: 10px; /* Space between input and the tick icon */
+}
+
+/* Focus state for the name input field */
+.name-input:focus {
+    outline: none;
+    border-color: #007bff;
+    background-color: #f5f5f5;
+}
+
+/* Style for the edit pencil icon */
+.edit-icon {
+    cursor: pointer;
+    transition: transform 0.3s ease; /* Smooth transition for the icon */
+}
+
+/* Style for the tick icon */
+.save-icon {
+    cursor: pointer;
+    transition: transform 0.3s ease; /* Smooth transition for the icon */
+}
+
+
+/* SVG size */
+.size-6 {
+    width: 16px;
+    height: 16px;
+}
+
+
+/* Hide the input field initially */
+.name-input[style="display: none;"] {
+    display: none;
+}
+
 
