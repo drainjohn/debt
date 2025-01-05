@@ -427,7 +427,7 @@ document.getElementById('tortureButton').addEventListener('click', async () => {
     
     const amount = customAmount || parseInt(document.querySelector('.debt-option.selected')?.getAttribute('data-amount')) || 0;
     
-    if (amount > 0 && amount <= 1000) {
+    if (amount > 0 && amount <= 3000) {
         const message = document.getElementById('messageInput').value;
         await addDebt(amount, message); // Add debt
         document.getElementById('debtPopup').style.display = 'none';
