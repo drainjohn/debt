@@ -19,9 +19,19 @@ async function getUserIP() {
     return data.ip;
 }
 
-// Initialize user session
+// Function to initialize the user session
 async function initializeUserSession() {
-    const ip = await getUserIP();
+    let ip;
+
+    // Try to retrieve IP from localStorage first
+    if (localStorage.getItem('userIP')) {
+        ip = localStorage.getItem('userIP');
+    } else {
+        // If no IP in localStorage, fetch the user's IP
+        ip = await getUserIP();
+        localStorage.setItem('userIP', ip); // Store IP in localStorage for future sessions
+    }
+
     const userRef = firestore.collection("users").doc(ip);
 
     const doc = await userRef.get();
@@ -40,6 +50,7 @@ async function initializeUserSession() {
 
     return ip;
 }
+
 
 // Function to show the congratulatory effect
 function showCongratulations() {
@@ -78,7 +89,8 @@ function updateDebtProgress() {
 
 async function addDebt(amount, message) {
     const ip = await initializeUserSession();
-    const userRef = firestore.collection('users').doc(ip);
+    //const userRef = firestore.collection('users').doc(ip);
+    const userRef = firestore.collection('users').doc(await getUserIP());
     const debtRef = realtimeDB.ref('debt');
 
     // ✅ Check if the user is within the cooldown period
@@ -149,24 +161,24 @@ document.getElementById('closeLeaderboard').addEventListener('click', () => {
     document.getElementById('leaderboardPopup').style.display = 'none';
 });
 
-// Fetch and Display Leaderboard
+// Fetch and Display Leaderboard with Editable Name for Current User
 async function fetchLeaderboard() {
     const leaderboardContainer = document.getElementById('leaderboardContainer');
     leaderboardContainer.innerHTML = ''; // Clear previous leaderboard data
 
-    // Get current user's IP to identify them
+    // Get the current user's IP to identify them
     const ip = await getUserIP();
     const currentUserDoc = await firestore.collection('users').doc(ip).get();
     const currentUserId = currentUserDoc.data().userId;
 
     // Fetch users from Firestore, ordered by debtAdded
-    const snapshot = await firestore.collection('users').orderBy('debtAdded', 'desc').limit(10).get();
+    const snapshot = await firestore.collection('users').orderBy('debtAdded', 'desc').get();
 
     let rank = 1;
     snapshot.forEach(doc => {
         const user = doc.data();
         const userId = user.userId || 'Unknown';
-        const displayName = userId.slice(0, 6); // Use first 6 characters for display
+        const displayName = user.displayName || `Guest ${userId.slice(0, 6)}`;
         const lastActive = user.lastActive ? formatDate(user.lastActive.seconds) : 'N/A';
         const debtAdded = user.debtAdded || 0;
 
@@ -174,24 +186,100 @@ async function fetchLeaderboard() {
         const item = document.createElement('div');
         item.className = 'leaderboard-item';
 
-        // Apply a different style for the current user
-        if (userId === currentUserId) {
-            item.classList.add('current-user');
-        }
-
-        item.innerHTML = `
+        const userDetailsHTML = `
             <div class="rank-circle">${rank}</div>
             <div class="user-details">
-                <h3>Guest ${displayName}</h3>
+                <h3>
+                    <div class="user-name-container">
+                        <span class="user-name" id="userName-${userId}">${displayName}</span>
+                        ${userId === currentUserId ? `
+                            <span class="edit-icon" id="editIcon-${userId}">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                </svg>
+                            </span>
+                        ` : ''}
+                    </div>
+                    <input type="text" class="name-input" id="nameInput-${userId}" style="display: none;" maxlength="20" />
+                </h3>
                 <span>Last Active: ${lastActive}</span>
             </div>
             <div class="strong-container"><strong>$${debtAdded}</strong></div>
         `;
 
+        item.innerHTML = userDetailsHTML;
+
+        // Append the item to the leaderboard
         leaderboardContainer.appendChild(item);
+
+        // Add event listeners for editing the name (only for the current user)
+        if (userId === currentUserId) {
+            setupNameEditing(userId);
+        }
+
         rank++;
     });
 }
+
+// Setup Name Editing for the Current User
+function setupNameEditing(userId) {
+    const editIcon = document.getElementById(`editIcon-${userId}`);
+    const userNameSpan = document.getElementById(`userName-${userId}`);
+    const nameInput = document.getElementById(`nameInput-${userId}`);
+
+    // Show input field and change icon to a tick when clicking the pencil
+    editIcon.addEventListener('click', () => {
+        if (nameInput.style.display === 'none') {
+            userNameSpan.style.display = 'none';
+            nameInput.style.display = 'block';
+            nameInput.value = userNameSpan.innerText;
+            editIcon.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+            `; // Change to save icon
+            nameInput.focus();
+        } else {
+            saveNewName(userId, nameInput.value.trim());
+            userNameSpan.innerText = nameInput.value.trim();
+            userNameSpan.style.display = 'block';
+            nameInput.style.display = 'none';
+            editIcon.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                </svg>
+            `; // Change back to edit icon
+        }
+    });
+
+    // Save name when Enter key is pressed
+    nameInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            saveNewName(userId, nameInput.value.trim());
+            userNameSpan.innerText = nameInput.value.trim();
+            userNameSpan.style.display = 'block';
+            nameInput.style.display = 'none';
+            editIcon.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                </svg>
+            `; // Change back to edit icon
+        }
+    });
+}
+
+
+// Save the New Name to Firestore
+async function saveNewName(userId, newName) {
+    const ip = await getUserIP();
+    const userRef = firestore.collection('users').doc(ip);
+
+    await userRef.update({
+        displayName: newName,
+        lastUpdated: new Date()
+    });
+}
+
 
 // Function to format date as "10 June 2025, 12pm"
 function formatDate(seconds) {
@@ -228,34 +316,46 @@ function showCooldownNotification(timeLeft) {
     }, 5000);
 }
 
-
-
-
-function updateSatisfactionLevel(amount) {
+function updateSatisfactionLevel() {
     const satisfactionValue = document.getElementById('satisfactionValue');
-    
-    // Adjust satisfaction levels to make it more stingy
+
+    // Get selected preset amount
+    const selectedOption = document.querySelector('.debt-option.selected');
+    const presetAmount = selectedOption ? parseInt(selectedOption.getAttribute('data-amount')) : 0;
+
+    // Get custom input amount
+    const customAmount = parseInt(document.getElementById('customAmount').value) || 0;
+
+    // Calculate the total debt amount
+    const totalAmount = presetAmount + customAmount;
+
+    // Determine satisfaction level based on total amount
     let satisfaction = 0;
-    
-    if (amount <= 5) {
-        satisfaction = 5;  // 5% satisfaction for $5
-    } else if (amount <= 15) {
-        satisfaction = 15;  // 15% satisfaction for $15
-    } else if (amount <= 50) {
-        satisfaction = 25;  // 25% satisfaction for $50
-    } else if (amount <= 100) {
-        satisfaction = 50;  // 50% satisfaction for $100
-    } else if (amount <= 200) {
-        satisfaction = 60;  // 60% satisfaction for $200
-    } else if (amount <= 500) {
-        satisfaction = 75;  // 75% satisfaction for $500
-    } else if (amount <= 1000) {
-        satisfaction = 90;  // 90% satisfaction for $1000
+
+    if (totalAmount <= 5) {
+        satisfaction = 5;
+    } else if (totalAmount <= 15) {
+        satisfaction = 15;
+    } else if (totalAmount <= 50) {
+        satisfaction = 25;
+    } else if (totalAmount <= 100) {
+        satisfaction = 50;
+    } else if (totalAmount <= 200) {
+        satisfaction = 60;
+    } else if (totalAmount <= 500) {
+        satisfaction = 75;
+    } else if (totalAmount <= 1000) {
+        satisfaction = 90;
+    } else if (totalAmount <= 1500) {
+        satisfaction = 95;
+    } else {
+        satisfaction = 100; // Cap satisfaction at 100% for anything above 1500
     }
-    
+
     // Update the satisfaction level display
-    satisfactionValue.innerText = satisfaction;
+    satisfactionValue.innerText = `${satisfaction}`;
 }
+
 
 // Function to enable or disable the Torture John button
 function toggleTortureButton() {
@@ -266,7 +366,8 @@ function toggleTortureButton() {
     const isCustomValid = customAmount && parseInt(customAmount) > 0 && parseInt(customAmount) <= 1000;
     if (isCustomValid || selectedOption) {
         document.getElementById('tortureButton').disabled = false;
-        document.getElementById('tortureButton').style.backgroundColor = '#fff';
+        document.getElementById('tortureButton').style.backgroundColor = '#000';
+        document.getElementById('tortureButton').style.color = '#fff';
         document.getElementById('tortureButton').style.cursor = 'pointer';
     } else {
         document.getElementById('tortureButton').disabled = true;
@@ -274,32 +375,46 @@ function toggleTortureButton() {
     }
 }
 
-// Event listener for debt options (fixed amount options)
+// Event listener for debt options (preset amounts)
 document.querySelectorAll('.debt-option').forEach(button => {
     button.addEventListener('click', () => {
-        const amount = parseInt(button.getAttribute('data-amount'));
-        updateSatisfactionLevel(amount); // Update satisfaction level based on selected amount
-
-        // Highlight the selected debt option
         document.querySelectorAll('.debt-option').forEach(b => b.classList.remove('selected'));
         button.classList.add('selected');
-
-        // Enable the button
-        toggleTortureButton();
+        updateSatisfactionLevel(); // Update satisfaction based on the total amount
+        updateTotalDebtAmount();   // Update the displayed total amount
+        toggleTortureButton();     // Enable/disable the button
     });
 });
 
-// Event listener for custom debt amount
 document.getElementById('customAmount').addEventListener('input', () => {
-    const customAmount = parseInt(document.getElementById('customAmount').value);
-    
-    if (customAmount > 0 && customAmount <= 1000) {
-        updateSatisfactionLevel(customAmount); // Update satisfaction level for custom amount
+    let customAmount = parseInt(document.getElementById('customAmount').value) || 0;
+
+    // Prevent typing numbers above 2000
+    if (customAmount > 2000) {
+        document.getElementById('customAmount').value = 2000;
+        customAmount = 2000;
     }
 
-    // Enable the button
-    toggleTortureButton();
+    updateSatisfactionLevel(); // Update satisfaction based on the total amount
+    updateTotalDebtAmount();   // Update the displayed total amount
+    toggleTortureButton();     // Enable/disable the button
 });
+
+document.getElementById('customAmount').addEventListener('input', () => {
+    const customAmountInput = document.getElementById('customAmount');
+    let customAmount = parseInt(customAmountInput.value) || 0;
+
+    // ✅ Limit the input to a maximum of 2000
+    if (customAmount > 2000) {
+        customAmountInput.value = 2000;
+        customAmount = 2000;
+    }
+
+    updateSatisfactionLevel(customAmount);
+    updateTotalDebtAmount(); // Update total debt amount
+    toggleTortureButton(); // Enable/disable the Torture button
+});
+
 
 // Event listener for the "Torture John" button
 document.getElementById('tortureButton').addEventListener('click', async () => {
@@ -333,9 +448,43 @@ function showCongratulations(amount) {
     }, 3000);
 }
 
+function updateTotalDebtAmount() {
+    const selectedOption = document.querySelector('.debt-option.selected');
+    const customAmount = parseInt(document.getElementById('customAmount').value) || 0;
+
+    // Get the amount from the selected option (if any)
+    const optionAmount = selectedOption ? parseInt(selectedOption.getAttribute('data-amount')) : 0;
+
+    // Calculate the total debt amount
+    const totalDebt = optionAmount + customAmount;
+
+    // Format the total debt amount with commas and update the display
+    document.getElementById('totalDebtAmount').innerText = `$${totalDebt.toLocaleString()}`;
+}
+
+
+document.querySelectorAll('.debt-option').forEach(button => {
+    button.addEventListener('click', () => {
+        updateSatisfactionLevel(parseInt(button.getAttribute('data-amount')));
+        document.querySelectorAll('.debt-option').forEach(b => b.classList.remove('selected'));
+        button.classList.add('selected');
+        updateTotalDebtAmount(); // Call the function to update total debt amount
+        toggleTortureButton();
+    });
+});
+
+document.getElementById('customAmount').addEventListener('input', () => {
+    updateSatisfactionLevel(parseInt(document.getElementById('customAmount').value) || 0);
+    updateTotalDebtAmount(); // Call the function to update total debt amount
+    toggleTortureButton();
+});
+
+
 // Event Listeners (ensure that a debt option is selected, including custom)
 document.getElementById('debtButton').addEventListener('click', () => {
     document.getElementById('debtPopup').style.display = 'flex';
+    document.getElementById('debtPopup').style.alignItems = 'center';
+    document.getElementById('debtPopup').style.justifyContent = 'center';
 });
 
 document.getElementById('closePopup').addEventListener('click', () => {
