@@ -181,15 +181,26 @@ async function fetchLeaderboard() {
         const lastActive = user.lastActive ? formatDate(user.lastActive.seconds) : 'N/A';
         const debtAdded = user.debtAdded || 0;
 
+        let circleColorClass = '';
+        if (rank === 1) circleColorClass = 'gold';
+        else if (rank === 2) circleColorClass = 'silver';
+        else if (rank === 3) circleColorClass = 'bronze';
+    
         // Create leaderboard item
         const item = document.createElement('div');
         item.className = 'leaderboard-item';
 
+        if (userId === currentUserId) {
+          item.classList.add('current-user');
+        }
+    
         const userDetailsHTML = `
-            <div class="rank-circle">${rank}</div>
+            <div class="rank-circle ${circleColorClass}">${rank}</div>
             <div class="user-details">
                 <h3>
                     <div class="user-name-container">
+                        <input type="text" class="name-input" id="nameInput-${userId}" style="display: none;" maxlength="20" />
+
                         <span class="user-name" id="userName-${userId}">${displayName}</span>
                         ${userId === currentUserId ? `
                             <span class="edit-icon" id="editIcon-${userId}">
@@ -201,7 +212,7 @@ async function fetchLeaderboard() {
                     </div>
                     <input type="text" class="name-input" id="nameInput-${userId}" style="display: none;" maxlength="20" />
                 </h3>
-                <span>Last Active: ${lastActive}</span>
+                <span>Active: ${lastActive}</span>
             </div>
             <div class="strong-container"><strong>$${debtAdded}</strong></div>
         `;
@@ -220,13 +231,11 @@ async function fetchLeaderboard() {
     });
 }
 
-// Setup Name Editing for the Current User
 function setupNameEditing(userId) {
     const editIcon = document.getElementById(`editIcon-${userId}`);
     const userNameSpan = document.getElementById(`userName-${userId}`);
     const nameInput = document.getElementById(`nameInput-${userId}`);
 
-    // Show input field and change icon to a tick when clicking the pencil
     editIcon.addEventListener('click', () => {
         if (nameInput.style.display === 'none') {
             userNameSpan.style.display = 'none';
@@ -236,7 +245,7 @@ function setupNameEditing(userId) {
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
-            `; // Change to save icon
+            `;
             nameInput.focus();
         } else {
             saveNewName(userId, nameInput.value.trim());
@@ -247,22 +256,7 @@ function setupNameEditing(userId) {
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                 </svg>
-            `; // Change back to edit icon
-        }
-    });
-
-    // Save name when Enter key is pressed
-    nameInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            saveNewName(userId, nameInput.value.trim());
-            userNameSpan.innerText = nameInput.value.trim();
-            userNameSpan.style.display = 'block';
-            nameInput.style.display = 'none';
-            editIcon.innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                </svg>
-            `; // Change back to edit icon
+            `;
         }
     });
 }
