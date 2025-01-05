@@ -24,9 +24,9 @@ body {
     background-color: #333;
     border-radius: 10px;
     padding: 20px;
-    width: calc(100% - 20px);
+    width: calc(100% - 30px);
     box-sizing: border-box;
-    height: calc(100% - 20px);
+    height: calc(100% - 30px);
     padding: 50px 100px;
     top: 0;
     left: 0;
@@ -182,13 +182,15 @@ progress::-moz-progress-bar {
 
 .debt-option {
   padding: 15px;
-  width: 100px;
+  width: 90px;
   color: #000;
   background: #000;
   font-size: 15px;
   font-weight: 400;
   border-radius: 5px;
   margin: 0 5px;
+  border: 1px solid #000;
+  outline: none;
 }
 
 
@@ -223,7 +225,7 @@ progress::-moz-progress-bar {
     background-color: #fff;
     padding: 30px;
     border-radius: 15px;
-    width: 400px;
+    width: 350px;
     height: 80%;
     color: #000;
     text-align: center;
@@ -237,11 +239,14 @@ progress::-moz-progress-bar {
     display: flex;
     justify-content: space-evenly;
     margin: 10px 0;
+    outline: none;
+    
 }
 
 .debt-options button {
     background-color: #fff;
     cursor: pointer;
+    border: 1px solid #000;
 }
 
 input, textarea {
@@ -393,7 +398,7 @@ input:focus, textarea:focus {
     background-color: #fff;
     padding: 15px;
     border-radius: 10px;
-    width: 400px;
+    width: 350px;
     height: 80%;
     text-align: center;
     display: flex;
