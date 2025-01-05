@@ -12,6 +12,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    user-select: none;
 }
 
 /* Container for the content */
@@ -337,7 +338,7 @@ input:focus, textarea:focus {
 /* Disable button when no option is selected */
 #tortureButton {
   padding: 14px;
-  width: 80%;
+  width: 95%;
   border-radius: 50px;
   font-size: 18px;
   font-weight: 900;
@@ -409,10 +410,12 @@ input:focus, textarea:focus {
     flex-direction: column;
     align-items: center;
     -webkit-overflow-scrolling: touch;
+    animation: popupAppear 0.3s ease-out;
 }
 
 .leaderboardContainer::-webkit-scrollbar {
-    display: none; /* Hides the Webkit scroll bar */
+    display: none;
+    width: none; /* Hides the Webkit scroll bar */
 }
 
 #leaderboardContainer {
@@ -592,5 +595,3 @@ input:focus, textarea:focus {
     display: flex;
     align-items: center; /* Vertically center the icon */
 }
-
-
