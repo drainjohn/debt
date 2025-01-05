@@ -149,11 +149,20 @@ async function addDebt(amount, message) {
 }
 
 
-// Show Leaderboard Popup
+
+
+
+let leaderboardFetched = false; // Flag to track if leaderboard has been fetched
+
 document.getElementById('leaderboardButton').addEventListener('click', () => {
     document.getElementById('leaderboardPopup').style.display = 'flex';
-    fetchLeaderboard();
+    // Fetch leaderboard data only if it hasn't been fetched yet
+    if (!leaderboardFetched) {
+        fetchLeaderboard();
+        leaderboardFetched = true; // Set the flag to true once it's fetched
+    }
 });
+
 
 // Close Leaderboard Popup
 document.getElementById('closeLeaderboard').addEventListener('click', () => {
@@ -289,8 +298,6 @@ function formatDate(seconds) {
 
     return date.toLocaleDateString('en-GB', options); // Use UK format (dd/mm/yyyy)
 }
-
-
 
 // Show Cooldown Notification
 function showCooldownNotification(timeLeft) {
