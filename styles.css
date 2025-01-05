@@ -24,9 +24,9 @@ body {
     background-color: #333;
     border-radius: 10px;
     padding: 20px;
-    width: calc(100% - 30px);
+    width: calc(100% - 20px);
     box-sizing: border-box;
-    height: calc(100% - 30px);
+    height: calc(100% - 20px);
     padding: 50px 100px;
     top: 0;
     left: 0;
