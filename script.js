@@ -99,8 +99,8 @@ async function addDebt(amount, message) {
         const lastUpdated = userDoc.data().lastUpdated?.toDate(); // Convert Firestore Timestamp to Date object
         const now = new Date();
 
-        if (lastUpdated && (now - lastUpdated) < 30 * 60 * 1000) { // Cooldown period of 30 minutes (30 minutes * 60 seconds * 1000 milliseconds)
-            const timeLeft = Math.ceil((30 * 60 * 1000 - (now - lastUpdated)) / 60000); // Minutes left
+        if (lastUpdated && (now - lastUpdated) < 60 * 60 * 1000) { // Cooldown period of 30 minutes (30 minutes * 60 seconds * 1000 milliseconds)
+            const timeLeft = Math.ceil((60 * 60 * 1000 - (now - lastUpdated)) / 60000); // Minutes left
             showCooldownNotification(timeLeft);
             return;
         }
@@ -335,19 +335,19 @@ function updateSatisfactionLevel() {
     if (totalAmount <= 5) {
         satisfaction = 5;
     } else if (totalAmount <= 15) {
-        satisfaction = 15;
+        satisfaction = 20;
     } else if (totalAmount <= 50) {
-        satisfaction = 25;
+        satisfaction = 30;
     } else if (totalAmount <= 100) {
         satisfaction = 50;
     } else if (totalAmount <= 200) {
-        satisfaction = 60;
+        satisfaction = 70;
     } else if (totalAmount <= 500) {
-        satisfaction = 75;
-    } else if (totalAmount <= 1000) {
         satisfaction = 90;
+    } else if (totalAmount <= 1000) {
+        satisfaction = 100;
     } else if (totalAmount <= 1500) {
-        satisfaction = 95;
+        satisfaction = 100;
     } else {
         satisfaction = 100; // Cap satisfaction at 100% for anything above 1500
     }
@@ -390,9 +390,9 @@ document.getElementById('customAmount').addEventListener('input', () => {
     let customAmount = parseInt(document.getElementById('customAmount').value) || 0;
 
     // Prevent typing numbers above 2000
-    if (customAmount > 2000) {
-        document.getElementById('customAmount').value = 2000;
-        customAmount = 2000;
+    if (customAmount > 1000) {
+        document.getElementById('customAmount').value = 1000;
+        customAmount = 1000;
     }
 
     updateSatisfactionLevel(); // Update satisfaction based on the total amount
@@ -405,9 +405,9 @@ document.getElementById('customAmount').addEventListener('input', () => {
     let customAmount = parseInt(customAmountInput.value) || 0;
 
     // ✅ Limit the input to a maximum of 2000
-    if (customAmount > 2000) {
-        customAmountInput.value = 2000;
-        customAmount = 2000;
+    if (customAmount > 1000) {
+        customAmountInput.value = 1000;
+        customAmount = 1000;
     }
 
     updateSatisfactionLevel(customAmount);
@@ -427,7 +427,7 @@ document.getElementById('tortureButton').addEventListener('click', async () => {
     
     const amount = customAmount || parseInt(document.querySelector('.debt-option.selected')?.getAttribute('data-amount')) || 0;
     
-    if (amount > 0 && amount <= 3000) {
+    if (amount > 0 && amount <= 1000) {
         const message = document.getElementById('messageInput').value;
         await addDebt(amount, message); // Add debt
         document.getElementById('debtPopup').style.display = 'none';
