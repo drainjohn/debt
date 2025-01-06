@@ -75,6 +75,7 @@ progress {
     border: 1px solid #fff;
     transition: width 1s ease; 
     border-radius: 50px;/* Smooth transition */
+    overflow: hidden;
 }
 
 /* Styling the progress meter inside the progress bar */
