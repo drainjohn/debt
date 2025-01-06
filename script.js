@@ -186,7 +186,7 @@ async function fetchLeaderboard() {
     snapshot.forEach(doc => {
         const user = doc.data();
         const userId = user.userId || 'Unknown';
-        const displayName = user.displayName || `Guest ${userId.slice(0, 6)}`;
+        const displayName = user.displayName || `Guest ${userId.slice(0, 7)}`;
         const lastActive = user.lastActive ? formatDate(user.lastActive.seconds) : 'N/A';
         const debtAdded = user.debtAdded || 0;
 
