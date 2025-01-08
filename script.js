@@ -221,7 +221,7 @@ async function fetchLeaderboard() {
                     </div>
                     <input type="text" class="name-input" id="nameInput-${userId}" style="display: none;" maxlength="20" />
                 </h3>
-                <span>Active: ${lastActive}</span>
+                <span>${lastActive}</span>
             </div>
             <div class="strong-container"><strong>$${debtAdded}</strong></div>
         `;
